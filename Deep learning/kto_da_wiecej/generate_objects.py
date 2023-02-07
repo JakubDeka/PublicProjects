@@ -24,9 +24,9 @@ def generate_play_transition_matrix(number_of_coins=20, number_of_values=101, sa
         # iterating over every current coins number
         for current_coins in range(number_of_coins + 1):
             if current_coins < 2:
-                single_probability_matrix[current_coins, 0] = 1
+                single_probability_matrix[current_coins, 0] = 1/number_of_values
             elif current_coins > number_of_coins - 2:
-                single_probability_matrix[current_coins, number_of_coins] = 1
+                single_probability_matrix[current_coins, number_of_coins] = 1/number_of_values
             else:
                 # iterating over every future coins number and setting appropriate probability values
                 for future_coins in range(number_of_coins + 1):
@@ -54,9 +54,9 @@ def generate_pass_transition_matrix(number_of_coins=20, number_of_values=101, sa
     # iterating over every current coins number
     for current_coins in range(number_of_coins + 1):
         if current_coins in [0, 1, 2]:
-            single_probability_matrix[current_coins, 0] = 1
+            single_probability_matrix[current_coins, 0] = 1/number_of_values
         else:
-            single_probability_matrix[current_coins, current_coins - 1] = 1
+            single_probability_matrix[current_coins, current_coins - 1] = 1/number_of_values
     # stacking matrix to fit the desired shape
     for value in range(number_of_values):
         row_matrix = np.hstack((row_matrix, single_probability_matrix))
@@ -73,7 +73,7 @@ def generate_reward_list(number_of_coins=20, modifier=1, alternative=False, save
         rewards[0] = -10
         rewards[-1] = 10
     else:
-        rewards = [modifier * i for i in range(number_of_coins + 1)]
+        rewards = [modifier * (i*i -121) for i in range(number_of_coins + 1)]
     if save:
         np.save("objects/reward_list.npy", rewards)
     return rewards

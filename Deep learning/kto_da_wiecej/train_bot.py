@@ -6,7 +6,7 @@ def train_bot(number_of_coins=20, number_of_values=101, gamma=0.8, epsilon=10 **
                                                          number_of_values=number_of_values)
     pass_probabilities = generate_pass_transition_matrix(number_of_coins=number_of_coins,
                                                          number_of_values=number_of_values)
-    rewards = generate_reward_list(number_of_coins=number_of_coins)
+    rewards = generate_reward_list(number_of_coins=number_of_coins, modifier=0.01)
 
     states = [i for i in range(len(play_probabilities))]
     values = np.zeros(len(play_probabilities))
@@ -14,6 +14,7 @@ def train_bot(number_of_coins=20, number_of_values=101, gamma=0.8, epsilon=10 **
     delta = 1
     iteration = 0
     while delta > epsilon and iteration < max_iter:
+        print(values)
         delta = 0
         iteration += 1
         for state in states:
@@ -32,8 +33,9 @@ def train_bot(number_of_coins=20, number_of_values=101, gamma=0.8, epsilon=10 **
     print(f"liczba iteracji do wyuczenia bota to {iteration}.")
     print(f"Zmiana dla ostatniej iteracji wynosiła {delta}.")
     np.save("strategy.npy", strategy)
+    print(values)
 
 
-train_bot(max_iter=100, gamma=1)
+train_bot(max_iter=100, gamma=0.8)
 
-print(np.load("strategy.npy", allow_pickle=True)[4, :40])
+print(np.load("strategy.npy", allow_pickle=True)[10, :101])
